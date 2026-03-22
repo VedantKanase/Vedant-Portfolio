@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vedant Kanase — Portfolio</title>
+<style>
+  :root {
+    --navy: #0B1F3A; --navy-mid: #132945; --blue: #1A5C9B;
+    --accent: #2E8FD4; --gold: #C8A84B; --light: #F5F8FC;
+    --white: #FFFFFF; --text: #1C2B3A; --muted: #6B7E92; --border: #D4E1EE;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --mono: 'Courier New', Courier, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--light); color: var(--text); overflow-x: hidden; line-height: 1.5; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5vw; height: 64px; background: rgba(11,31,58,0.98); border-bottom: 1px solid rgba(46,143,212,0.15); }
+  .nav-logo { font-family: var(--serif); font-size: 1.25rem; color: var(--white); font-weight: 700; letter-spacing: 0.02em; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 1.6rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+  /* HERO */
+  #hero { min-height: 100vh; background: var(--navy); display: flex; align-items: center; position: relative; overflow: hidden; padding: 80px 6vw 0; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(46,143,212,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(46,143,212,0.07) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-glow { position: absolute; width: 580px; height: 580px; border-radius: 50%; background: radial-gradient(circle, rgba(46,143,212,0.2) 0%, transparent 70%); top: -120px; right: -80px; animation: pulse 5s ease-in-out infinite; pointer-events: none; }
+  .hero-glow2 { position: absolute; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(200,168,75,0.12) 0%, transparent 70%); bottom: -40px; left: 8%; animation: pulse 7s ease-in-out infinite reverse; pointer-events: none; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.1);opacity:0.7;} }
+
+  .hero-content { position: relative; z-index: 2; max-width: 760px; }
+  .hero-tag { display: inline-block; font-family: var(--mono); font-size: 0.78rem; color: var(--accent); background: rgba(46,143,212,0.12); border: 1px solid rgba(46,143,212,0.35); padding: 0.3rem 1rem; border-radius: 2px; letter-spacing: 0.1em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.3s forwards; }
+  .hero-name { font-family: var(--serif); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900; color: var(--white); line-height: 1.0; margin-bottom: 1.1rem; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
+  .hero-name em { color: var(--gold); font-style: normal; }
+  .hero-sub { font-size: 1.08rem; color: rgba(255,255,255,0.62); line-height: 1.8; max-width: 540px; margin-bottom: 2.2rem; opacity: 0; animation: fadeUp 0.7s 0.7s forwards; }
+  .hero-sub strong { color: rgba(255,255,255,0.92); }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.7s 0.9s forwards; }
+  .badge { font-family: var(--mono); font-size: 0.72rem; padding: 0.28rem 0.8rem; border: 1px solid rgba(46,143,212,0.4); color: rgba(255,255,255,0.65); border-radius: 2px; letter-spacing: 0.05em; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 1.1s forwards; }
+  .btn-gold { padding: 0.82rem 1.8rem; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.88rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; border-radius: 2px; transition: transform 0.2s, box-shadow 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,168,75,0.38); }
+  .btn-ghost { padding: 0.82rem 1.8rem; background: transparent; color: var(--white); font-weight: 600; font-size: 0.88rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.28); cursor: pointer; border-radius: 2px; transition: border-color 0.2s, color 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .scroll-hint { position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.45rem; opacity: 0; animation: fadeIn 1s 1.8s forwards; }
+  .scroll-hint span { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+  .scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, rgba(46,143,212,0.7), transparent); animation: scrollDrop 1.8s ease-in-out infinite; }
+  @keyframes scrollDrop { 0%{transform:scaleY(0);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:top;} 51%{transform:scaleY(1);transform-origin:bottom;} 100%{transform:scaleY(0);transform-origin:bottom;} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeIn { to{opacity:1;} }
+
+  /* SECTIONS */
+  section { padding: 90px 6vw; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.55rem; display: flex; align-items: center; gap: 0.8rem; }
+  .section-label::after { content:''; display:block; width:44px; height:1px; background:var(--accent); }
+  .section-title { font-family: var(--serif); font-size: clamp(1.9rem, 3.5vw, 2.7rem); font-weight: 700; color: var(--navy); line-height: 1.15; margin-bottom: 2.8rem; }
+
+  /* ABOUT */
+  #about { background: var(--white); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5rem; align-items: center; }
+  .about-text p { font-size: 1rem; color: var(--muted); line-height: 1.85; margin-bottom: 1.1rem; }
+  .about-text strong { color: var(--text); font-weight: 600; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .stat-card { background: var(--light); border: 1px solid var(--border); padding: 1.4rem 1.5rem; border-radius: 3px; border-left: 3px solid var(--gold); transition: transform 0.2s, box-shadow 0.2s; }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(11,31,58,0.09); }
+  .stat-num { font-family: var(--serif); font-size: 2.1rem; font-weight: 700; color: var(--navy); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; font-weight: 500; }
+
+  /* SKILLS */
+  #skills { background: var(--light); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 1.3rem; }
+  .skill-card { background: var(--white); border: 1px solid var(--border); padding: 1.6rem; border-radius: 3px; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
+  .skill-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:var(--accent); transition:height 0.3s ease; }
+  .skill-card:hover::before { height:100%; }
+  .skill-card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(11,31,58,0.1); border-color: var(--accent); }
+  .skill-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .skill-cat { font-size: 0.68rem; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .skill-name { font-family: var(--serif); font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 0.65rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.38rem; }
+  .skill-tag { font-family: var(--mono); font-size: 0.69rem; background: var(--light); color: var(--muted); padding: 0.2rem 0.55rem; border-radius: 2px; border: 1px solid var(--border); }
+
+  /* PROJECTS */
+  #projects { background: var(--navy); }
+  #projects .section-title { color: var(--white); }
+  #projects .section-label { color: var(--gold); }
+  #projects .section-label::after { background: var(--gold); }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+  .project-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 3px; padding: 2rem; transition: transform 0.25s, border-color 0.25s, background 0.25s; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .project-card:hover { transform: translateY(-5px); border-color: rgba(46,143,212,0.5); background: rgba(255,255,255,0.07); }
+  .project-num { font-family: var(--mono); font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.8rem; }
+  .project-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: 0.35rem; }
+  .project-subtitle { font-size: 0.8rem; color: var(--accent); font-weight: 600; letter-spacing: 0.03em; margin-bottom: 1rem; }
+  .project-desc { font-size: 0.92rem; color: rgba(255,255,255,0.58); line-height: 1.75; flex: 1; margin-bottom: 1.2rem; }
+  .project-highlights { list-style: none; margin-bottom: 1.3rem; }
+  .project-highlights li { font-size: 0.85rem; color: rgba(255,255,255,0.52); padding: 0.28rem 0; padding-left: 1rem; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .project-highlights li::before { content:'▸'; position:absolute; left:0; color:var(--accent); font-size:0.66rem; top:0.36rem; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.42rem; }
+  .stack-tag { font-family: var(--mono); font-size: 0.7rem; padding: 0.2rem 0.62rem; background: rgba(46,143,212,0.15); color: var(--accent); border: 1px solid rgba(46,143,212,0.3); border-radius: 2px; }
+
+  /* HACKATHONS */
+  #hackathons { background: var(--white); }
+  .hack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.4rem; }
+  .hack-card { background: var(--light); border: 1px solid var(--border); border-radius: 3px; padding: 1.7rem; transition: transform 0.2s, box-shadow 0.2s; }
+  .hack-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(11,31,58,0.09); }
+  .hack-card.featured { border-color: var(--gold); background: #FFFDF4; border-left: 3px solid var(--gold); }
+  .hack-badge { display: inline-block; font-family: var(--mono); font-size: 0.68rem; padding: 0.22rem 0.65rem; border-radius: 2px; margin-bottom: 0.9rem; letter-spacing: 0.06em; font-weight: 600; }
+  .hack-badge.participated { background: rgba(26,92,155,0.1); color: var(--blue); border: 1px solid rgba(26,92,155,0.3); }
+  .hack-badge.soon { background: rgba(200,168,75,0.15); color: #9A7A1E; border: 1px solid rgba(200,168,75,0.4); }
+  .hack-title { font-family: var(--serif); font-size: 1.08rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+  .hack-role { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.7rem; font-weight: 500; }
+  .hack-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.72; }
+  .hack-ps { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .hack-ps-label { font-family: var(--mono); font-size: 0.66rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; font-weight: 700; }
+  .hack-ps-text { font-size: 0.85rem; color: var(--text); font-weight: 700; line-height: 1.45; margin-bottom: 0.6rem; }
+  .hack-outcomes { list-style: none; }
+  .hack-outcomes li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0 0.2rem 1rem; position: relative; }
+  .hack-outcomes li::before { content:'▸'; position:absolute; left:0; color:var(--blue); font-size:0.65rem; top:0.28rem; }
+
+  /* PROBLEM SOLVING */
+  #problems { background: var(--navy-mid); }
+  #problems .section-title { color: var(--white); }
+  #problems .section-label { color: var(--gold); }
+  #problems .section-label::after { background: var(--gold); }
+  .problem-list { display: flex; flex-direction: column; gap: 1.3rem; }
+  .problem-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 3px; padding: 1.8rem; display: grid; grid-template-columns: 50px 1fr; gap: 1.3rem; align-items: start; transition: border-color 0.2s, background 0.2s; }
+  .problem-card:hover { border-color: rgba(200,168,75,0.4); background: rgba(255,255,255,0.06); }
+  .problem-num { font-family: var(--serif); font-size: 2.1rem; font-weight: 900; color: rgba(200,168,75,0.22); line-height: 1; }
+  .problem-title { font-family: var(--serif); font-size: 1.08rem; font-weight: 700; color: var(--white); margin-bottom: 0.38rem; }
+  .problem-context { font-family: var(--mono); font-size: 0.72rem; color: var(--gold); letter-spacing: 0.07em; margin-bottom: 0.55rem; }
+  .problem-text { font-size: 0.92rem; color: rgba(255,255,255,0.57); line-height: 1.78; }
+
+  /* IDEAS */
+  #ideas { background: var(--light); }
+  .ideas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(188px, 1fr)); gap: 1.2rem; }
+  .idea-card { background: var(--white); border: 1px solid var(--border); border-radius: 3px; padding: 1.5rem; text-align: center; transition: transform 0.2s, border-color 0.2s; cursor: default; }
+  .idea-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+  .idea-icon { font-size: 1.9rem; margin-bottom: 0.65rem; }
+  .idea-title { font-family: var(--serif); font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.35rem; }
+  .idea-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* FOOTER */
+  footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 3rem 6vw; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+  .footer-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--white); font-weight: 700; margin-bottom: 0.3rem; }
+  .footer-logo span { color: var(--gold); }
+  .footer-left p { font-size: 0.84rem; color: rgba(255,255,255,0.36); margin-top: 0.3rem; }
+  .footer-links { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+  .footer-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.1rem; border: 1px solid rgba(255,255,255,0.14); border-radius: 2px; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
+  .footer-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .about-grid, .projects-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .nav-links { display: none; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">V<span>.</span>Kanase</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#hackathons">Hackathons</a></li>
+    <li><a href="#problems">Challenges</a></li>
+    <li><a href="#ideas">Ideas</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">// B.Tech · Electronics &amp; Computer Science</div>
+    <h1 class="hero-name">Vedant<br/><em>Kanase</em></h1>
+    <p class="hero-sub">Engineering at the intersection of <strong>hardware and software</strong> — building full-stack platforms, designing PCB circuits, and exploring cybersecurity.</p>
+    <div class="hero-badges">
+      <span class="badge">Full-Stack Dev</span>
+      <span class="badge">PCB Designer</span>
+      <span class="badge">SIH Participant</span>
+      <span class="badge">Cybersecurity Learner</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-gold">View Projects ↓</a>
+      <a href="#" class="btn-ghost resume-dl">↓ Download Resume</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">01 — About</div>
+    <h2 class="section-title reveal">A Builder at Heart</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a <strong>B.Tech student in Electronics &amp; Computer Science</strong> at Pillai College of Engineering, Rasayani — passionate about the full stack from silicon to server.</p>
+        <p>From soldering PCBs and designing analog circuits in KiCad, to building full-stack web applications with Next.js and Firebase — I thrive where hardware meets software.</p>
+        <p>Currently <strong>learning cybersecurity</strong> — exploring networking fundamentals, Linux security, and ethical hacking basics.</p>
+        <p>Based in <strong>New Panvel, Maharashtra</strong>. Open to internships in software, embedded systems, or electronics.</p>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat-card"><div class="stat-num">7.0</div><div class="stat-label">CGPA — B.Tech Sem 4</div></div>
+        <div class="stat-card"><div class="stat-num">84%</div><div class="stat-label">HSC Score — Science</div></div>
+        <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Real-World Projects</div></div>
+        <div class="stat-card"><div class="stat-num">SIH</div><div class="stat-label">National Hackathon</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">02 — Skills</div>
+    <h2 class="section-title reveal">Technical Expertise</h2>
+    <div class="skills-grid">
+      <div class="skill-card reveal"><div class="skill-icon">💻</div><div class="skill-cat">Programming</div><div class="skill-name">Software Dev</div><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">C</span><span class="skill-tag">Java (Basic)</span><span class="skill-tag">TypeScript</span></div></div>
+      <div class="skill-card reveal"><div class="skill-icon">🌐</div><div class="skill-cat">Web</div><div class="skill-name">Full-Stack Web</div><div class="skill-tags"><span class="skill-tag">Next.js 14</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Firebase</span><span class="skill-tag">Gemini AI</span></div></div>
+      <div class="skill-card reveal"><div class="skill-icon">🔌</div><div class="skill-cat">Hardware</div><div class="skill-name">Electronics &amp; PCB</div><div class="skill-tags"><span class="skill-tag">KiCad</span><span class="skill-tag">Arduino</span><span class="skill-tag">Circuit Design</span><span class="skill-tag">Soldering</span><span class="skill-tag">Power Electronics</span></div></div>
+      <div class="skill-card reveal"><div class="skill-icon">🛡️</div><div class="skill-cat">Learning</div><div class="skill-name">Cybersecurity</div><div class="skill-tags"><span class="skill-tag">Networking</span><span class="skill-tag">Linux Security</span><span class="skill-tag">Ethical Hacking</span></div></div>
+      <div class="skill-card reveal"><div class="skill-icon">🛠️</div><div class="skill-cat">Tools</div><div class="skill-name">Dev Tools</div><div class="skill-tags"><span class="skill-tag">VS Code</span><span class="skill-tag">Git</span><span class="skill-tag">Arduino IDE</span><span class="skill-tag">Proteus</span><span class="skill-tag">Linux</span></div></div>
+      <div class="skill-card reveal"><div class="skill-icon">📚</div><div class="skill-cat">Core</div><div class="skill-name">CS Fundamentals</div><div class="skill-tags"><span class="skill-tag">Data Structures</span><span class="skill-tag">Computer Networks</span><span class="skill-tag">OS</span><span class="skill-tag">Embedded Systems</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">03 — Projects</div>
+    <h2 class="section-title reveal">What I've Built</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-num">Project / 01 · Full-Stack Web</div>
+        <div class="project-title">Slumini</div>
+        <div class="project-subtitle">Alumni Connection &amp; Guidance Portal</div>
+        <p class="project-desc">A full-stack alumni interaction platform bridging students, alumni, and teachers on one unified system — replacing scattered WhatsApp groups with real-time organized workflows.</p>
+        <ul class="project-highlights">
+          <li>Real-time Firebase chat between students &amp; alumni</li>
+          <li>Live job board — internships &amp; full-time roles</li>
+          <li>AI chatbot guidance via Gemini 2.5 Flash</li>
+          <li>Resume review, event registration, career assessments</li>
+          <li>Zero data lag using Firestore onSnapshot listeners</li>
+        </ul>
+        <div class="project-stack"><span class="stack-tag">Next.js 14</span><span class="stack-tag">Firebase</span><span class="stack-tag">TypeScript</span><span class="stack-tag">Gemini AI</span></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">Project / 02 · Hardware / PCB</div>
+        <div class="project-title">Auto Water Pump</div>
+        <div class="project-subtitle">12V PCB Controller — NE555 Timer IC</div>
+        <p class="project-desc">A hardware-only automatic water pump controller built from scratch — no microcontroller. Custom double-sided PCB designed in KiCad with full analog circuit design.</p>
+        <ul class="project-highlights">
+          <li>Level-sensing probe → relay-activated DC pump</li>
+          <li>NE555 monostable mode with adjustable potentiometer</li>
+          <li>Double-sided PCB with GND pour &amp; trace calc (3–5A)</li>
+          <li>BC547 driver, flyback diode, LED indicator</li>
+          <li>Fully soldered &amp; tested real-world build</li>
+        </ul>
+        <div class="project-stack"><span class="stack-tag">KiCad</span><span class="stack-tag">NE555</span><span class="stack-tag">Analog Design</span><span class="stack-tag">PCB Routing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HACKATHONS -->
+<section id="hackathons">
+  <div class="section-inner">
+    <div class="section-label">04 — Competitions &amp; Events</div>
+    <h2 class="section-title reveal">Hackathons &amp; Competitions</h2>
+    <div class="hack-grid">
+      <div class="hack-card featured reveal">
+        <span class="hack-badge participated">SIH 2024 — Participated</span>
+        <div class="hack-title">Smart India Hackathon 2024</div>
+        <div class="hack-role">National Level · Full-Stack Developer</div>
+        <div class="hack-desc">Participated in India's largest national-level hackathon, building a centralized alumni management and engagement platform to solve a real problem submitted by educational institutions.</div>
+        <div class="hack-ps">
+          <div class="hack-ps-label">Problem Statement</div>
+          <div class="hack-ps-text">Digital Platform for Centralized Alumni Data Management and Engagement</div>
+          <ul class="hack-outcomes">
+            <li>Centralized alumni data storage &amp; career progress tracking</li>
+            <li>Communication, networking &amp; event management features</li>
+            <li>Mentorship, internship &amp; donation tracking system</li>
+            <li>Secure admin dashboard for institutions &amp; recruiters</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hack-card featured reveal">
+        <span class="hack-badge participated">Tech Aspiria 2.0 — Participated</span>
+        <div class="hack-title">Tech Aspiria 2.0</div>
+        <div class="hack-role">Project Competition · Builder</div>
+        <div class="hack-desc">Participated in Tech Aspiria 2.0, a project-based competition where I showcased technical problem-solving skills and presented a working project to a panel of judges.</div>
+      </div>
+      <div class="hack-card reveal">
+        <span class="hack-badge soon">Targeting Next</span>
+        <div class="hack-title">IoT + Web Hackathons</div>
+        <div class="hack-role">Role: End-to-End Builder</div>
+        <div class="hack-desc">Targeting hackathons combining hardware sensors with web dashboards — the intersection where my PCB design and full-stack skills combine most powerfully.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM SOLVING -->
+<section id="problems">
+  <div class="section-inner">
+    <div class="section-label">05 — Engineering Stories</div>
+    <h2 class="section-title reveal">Challenges I Solved</h2>
+    <div class="problem-list">
+      <div class="problem-card reveal">
+        <div class="problem-num">01</div>
+        <div>
+          <div class="problem-context">PCB Design · Auto Water Pump</div>
+          <div class="problem-title">Preventing Motor Burnout on Dry-Run</div>
+          <div class="problem-text">The pump would run even when water levels were dangerously low, risking burnout. I implemented a monostable NE555 timing circuit with an adjustable potentiometer — the pump now auto-cuts after a configurable ON-duration, preventing dry-run damage without any microcontroller logic.</div>
+        </div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">02</div>
+        <div>
+          <div class="problem-context">PCB Layout · KiCad</div>
+          <div class="problem-title">High-Current Trace Failures at 3–5A</div>
+          <div class="problem-text">Initial PCB traces were too thin for the pump's 3–5A load, causing heat buildup and potential failure. I recalculated trace widths using IPC-2221 standards, added a GND copper pour for thermal dissipation, and integrated a flyback diode to suppress relay voltage spikes.</div>
+        </div>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-num">03</div>
+        <div>
+          <div class="problem-context">Full-Stack · Slumini</div>
+          <div class="problem-title">Real-Time Data Without Page Refresh</div>
+          <div class="problem-text">Early versions required manual refresh to see new messages and job postings. Switched to Firebase Firestore's onSnapshot listeners — all data now updates instantly across all users simultaneously, with zero polling overhead.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEAS -->
+<section id="ideas">
+  <div class="section-inner">
+    <div class="section-label">06 — What's Next</div>
+    <h2 class="section-title reveal">Ideas I Want to Build</h2>
+    <div class="ideas-grid">
+      <div class="idea-card reveal"><div class="idea-icon">🚦</div><div class="idea-title">Smart Traffic Control</div><div class="idea-desc">AI-adaptive signal timing based on real-time vehicle density using sensors.</div></div>
+      <div class="idea-card reveal"><div class="idea-icon">⚡</div><div class="idea-title">AI Energy Monitor</div><div class="idea-desc">IoT device tracking home power per appliance with ML-driven savings suggestions.</div></div>
+      <div class="idea-card reveal"><div class="idea-icon">🌱</div><div class="idea-title">Smart Irrigation</div><div class="idea-desc">Soil moisture + weather API based auto-watering with mobile dashboard.</div></div>
+      <div class="idea-card reveal"><div class="idea-icon">🏥</div><div class="idea-title">Low-Cost Medical Device</div><div class="idea-desc">Affordable pulse oximeter + temp monitor with wireless data logging.</div></div>
+      <div class="idea-card reveal"><div class="idea-icon">🔐</div><div class="idea-title">Network Intrusion Detector</div><div class="idea-desc">Python tool to monitor local traffic and flag suspicious patterns.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo">V<span>.</span>Kanase</div>
+      <p>kanasevedant6@gmail.com &nbsp;·&nbsp; +91 9920258591 &nbsp;·&nbsp; New Panvel, MH</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/VedantKanase" target="_blank" class="footer-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="#" class="footer-link resume-dl">↓ Resume</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 70); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+
+  // Silent resume download via hidden iframe
+  function downloadResume(e) {
+    e.preventDefault();
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = 'https://docs.google.com/document/d/1tuaAM68aAGH0OB3JGQrIXcA3mM1CKHoK/export?format=docx';
+    document.body.appendChild(iframe);
+    setTimeout(() => document.body.removeChild(iframe), 5000);
+  }
+  document.querySelectorAll('.resume-dl').forEach(el => el.addEventListener('click', downloadResume));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+    navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + cur); });
+  });
+</script>
+</body>
+</html>
